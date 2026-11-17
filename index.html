@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SK WIKI</title>
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f5f6f8;
+    color: #222;
+    font-family: Arial, "Malgun Gothic", sans-serif;
+}
+
+header {
+    background: #263b63;
+    color: white;
+    padding: 20px;
+}
+
+.header-inner {
+    max-width: 1100px;
+    margin: auto;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.subtitle {
+    margin-top: 5px;
+    color: #d5deef;
+    font-size: 13px;
+}
+
+nav {
+    background: white;
+    border-bottom: 1px solid #ddd;
+    padding: 12px 20px;
+}
+
+.nav-inner {
+    max-width: 1100px;
+    margin: auto;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: #263b63;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 25px auto;
+    padding: 0 15px;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 20px;
+}
+
+.sidebar,
+.content {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.sidebar h3 {
+    margin-top: 20px;
+    color: #263b63;
+}
+
+.tree-list {
+    list-style: none;
+    padding-left: 15px;
+    margin: 5px 0;
+}
+
+.tree-list.root {
+    padding-left: 0;
+}
+
+.tree-list li {
+    margin: 5px 0;
+}
+
+.tree-list a {
+    display: block;
+    padding: 7px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    overflow-wrap: anywhere;
+}
+
+.tree-list a:hover {
+    background: #f1f4f9;
+    color: #2456a6;
+}
+
+.tree-list a.active {
+    background: #eaf0fa;
+    color: #2456a6;
+    font-weight: bold;
+}
+
+.search-box {
+    margin-bottom: 20px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    font-size: 15px;
+}
+
+#searchResults {
+    margin-top: 8px;
+}
+
+#searchResults a {
+    display: block;
+    padding: 8px;
+    color: #263b63;
+    text-decoration: none;
+    border-bottom: 1px solid #eee;
+}
+
+#searchResults a:hover {
+    background: #f1f4f9;
+}
+
+.content h1 {
+    font-size: 27px;
+    border-bottom: 2px solid #263b63;
+    padding-bottom: 12px;
+    margin-top: 0;
+}
+
+.content h2 {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 7px;
+}
+
+.content p {
+    line-height: 1.8;
+}
+
+.content a {
+    color: #2456a6;
+    text-decoration: none;
+}
+
+.content a:hover {
+    text-decoration: underline;
+}
+
+.content blockquote {
+    margin: 12px 0;
+    padding: 10px 15px;
+    background: #f5f6f8;
+    border-left: 4px solid #8295b5;
+}
+
+.content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 15px 0;
+}
+
+.content td,
+.content th {
+    border: 1px solid #bbb;
+    padding: 9px;
+    text-align: left;
+}
+
+.content hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 20px 0;
+}
+
+.content pre {
+    background: #272822;
+    color: #f8f8f2;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+}
+
+.content code {
+    font-family: Consolas, monospace;
+}
+
+.page-info {
+    color: #888;
+    font-size: 12px;
+    margin-bottom: 15px;
+}
+
+.breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    align-items: center;
+    font-size: 13px;
+    margin-bottom: 18px;
+    color: #888;
+}
+
+.breadcrumbs a {
+    color: #2456a6;
+}
+
+.child-documents {
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+}
+
+.child-documents h2 {
+    font-size: 19px;
+}
+
+.child-documents ul {
+    padding-left: 22px;
+    line-height: 2;
+}
+
+.child-documents a {
+    color: #2456a6;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #777;
+    font-size: 13px;
+}
+
+@media (max-width: 700px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        order: 2;
+    }
+
+    .content {
+        order: 1;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="logo" onclick="goTo('홈')">SK WIKI</div>
+        <div class="subtitle">SK WIKI에 오신 것을 환영합니다.</div>
+    </div>
+</header>
+
+<nav>
+    <div class="nav-inner">
+        <a href="#홈">홈</a>
+        <a href="#대문">대문</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <aside class="sidebar">
+
+        <div class="search-box">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="문서 검색"
+                oninput="searchPages()"
+            >
+            <div id="searchResults"></div>
+        </div>
+
+        <h3>전체 문서</h3>
+        <div id="documentTree"></div>
+
+    </aside>
+
+    <main class="content">
+        <div class="page-info" id="pageInfo"></div>
+        <div class="breadcrumbs" id="breadcrumbs"></div>
+        <div id="wikiContent"></div>
+        <div id="childDocuments"></div>
+    </main>
+
+</div>
+
+<footer>
+    SK WIKI
+</footer>
+
+<script>
+const pages = {
+    "홈": {
+        parent: null,
+        content: `
+= 홈 =
+
+SK WIKI에 오신 것을 환영합니다.
+
+[[대문|대문으로 이동]]
+`
+    },
+
+    "대문": {
+        parent: null,
+        content: `
+= SK WIKI 대문 =
+
+SK WIKI의 공식 대문입니다.
+
+이 위키는 다양한 정보를 정리하고 보관하기 위한 위키입니다.
+
+== 문서 안내 ==
+
+문서 목록에서 문서를 선택할 수 있습니다.
+
+[[홈|홈으로 돌아가기]]
+`
+    }
+};
+
+function escapeHTML(text) {
+    return String(text).replace(/[&<>"']/g, function(char) {
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        }[char];
+    });
+}
+
+function inlineMarkup(text) {
+    let result = escapeHTML(text);
+
+    result = result.replace(
+        /\[\[이미지:(https?:\/\/[^|\]]+)(?:\|([^\]]+))?\]\]/g,
+        function(match, url, alt) {
+            return '<img src="' + url + '" alt="' +
+                (alt || "이미지") +
+                '" style="max-width:100%;">';
+        }
+    );
+
+    result = result.replace(
+        /\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g,
+        function(match, target, label) {
+            if (target.startsWith("분류:")) {
+                return '<span style="color:#888;">' +
+                    target + '</span>';
+            }
+
+            return '<a href="#' +
+                encodeURIComponent(target.trim()) +
+                '">' + (label || target) + '</a>';
+        }
+    );
+
+    result = result.replace(
+        /\[(https?:\/\/\S+?)\s+([^\]]+)\]/g,
+        '<a href="$1" target="_blank" rel="noopener noreferrer">$2</a>'
+    );
+
+    result = result.replace(/'''(.*?)'''/g, "<strong>$1</strong>");
+    result = result.replace(/''(.*?)''/g, "<em>$1</em>");
+    result = result.replace(/__(.*?)__/g, "<u>$1</u>");
+    result = result.replace(/~~(.*?)~~/g, "<del>$1</del>");
+    result = result.replace(/\^(.*?)\^/g, "<sup>$1</sup>");
+    result = result.replace(/,,(.*?),,/g, "<sub>$1</sub>");
+
+    return result;
+}
+
+function renderMarkup(source) {
+    const lines = source.trim().split("\n");
+    let output = "";
+    let paragraph = [];
+    let listType = "";
+    let codeMode = false;
+    let codeLines = [];
+    let tableMode = false;
+
+    function closeParagraph() {
+        if (paragraph.length) {
+            output += "<p>" +
+                inlineMarkup(paragraph.join(" ")) +
+                "</p>";
+            paragraph = [];
+        }
+    }
+
+    function closeList() {
+        if (listType) {
+            output += "</" + listType + ">";
+            listType = "";
+        }
+    }
+
+    function closeTable() {
+        if (tableMode) {
+            output += "</tbody></table>";
+            tableMode = false;
+        }
+    }
+
+    for (let line of lines) {
+        const trimmed = line.trim();
+
+        if (codeMode) {
+            if (trimmed === "}}}") {
+                output += "<pre><code>" +
+                    escapeHTML(codeLines.join("\n")) +
+                    "</code></pre>";
+                codeLines = [];
+                codeMode = false;
+            } else {
+                codeLines.push(line);
+            }
+            continue;
+        }
+
+        if (trimmed === "{{{") {
+            closeParagraph();
+            closeList();
+            closeTable();
+            codeMode = true;
+            continue;
+        }
+
+        if (!trimmed) {
+            closeParagraph();
+            closeList();
+            closeTable();
+            continue;
+        }
+
+        const heading = trimmed.match(/^(={1,6})\s*(.*?)\s*\1$/);
+
+        if (heading) {
+            closeParagraph();
+            closeList();
+            closeTable();
+
+            const level = heading[1].length;
+
+            output += "<h" + level + ">" +
+                inlineMarkup(heading[2]) +
+                "</h" + level + ">";
+
+            continue;
+        }
+
+        if (/^-{3,}$/.test(trimmed)) {
+            closeParagraph();
+            closeList();
+            closeTable();
+            output += "<hr>";
+            continue;
+        }
+
+        if (trimmed.startsWith("||") && trimmed.endsWith("||")) {
+            closeParagraph();
+            closeList();
+
+            if (!tableMode) {
+                output += "<table><tbody>";
+                tableMode = true;
+            }
+
+            const cells = trimmed.slice(2, -2).split("||");
+
+            output += "<tr>";
+
+            for (const cell of cells) {
+                output += "<td>" +
+                    inlineMarkup(cell.trim()) +
+                    "</td>";
+            }
+
+            output += "</tr>";
+            continue;
+        }
+
+        const listMatch = trimmed.match(/^([*#])\s+(.*)$/);
+
+        if (listMatch) {
+            closeParagraph();
+            closeTable();
+
+            const newType = listMatch[1] === "*" ? "ul" : "ol";
+
+            if (listType !== newType) {
+                closeList();
+                output += "<" + newType + ">";
+                listType = newType;
+            }
+
+            output += "<li>" +
+                inlineMarkup(listMatch[2]) +
+                "</li>";
+
+            continue;
+        }
+
+        if (trimmed.startsWith(">")) {
+            closeParagraph();
+            closeList();
+            closeTable();
+
+            output += "<blockquote>" +
+                inlineMarkup(trimmed.slice(1).trim()) +
+                "</blockquote>";
+
+            continue;
+        }
+
+        closeList();
+        closeTable();
+        paragraph.push(trimmed);
+    }
+
+    closeParagraph();
+    closeList();
+    closeTable();
+
+    if (codeMode) {
+        output += "<pre><code>" +
+            escapeHTML(codeLines.join("\n")) +
+            "</code></pre>";
+    }
+
+    return output;
+}
+
+function goTo(name) {
+    location.hash = encodeURIComponent(name);
+}
+
+function getChildren(parentName) {
+    return Object.keys(pages).filter(function(name) {
+        return pages[name].parent === parentName;
+    });
+}
+
+function renderTree(parentName, ancestors, currentPage) {
+    const children = getChildren(parentName);
+
+    if (children.length === 0) {
+        return "";
+    }
+
+    let html = '<ul class="tree-list">';
+
+    children.forEach(function(name) {
+        if (ancestors.has(name)) {
+            return;
+        }
+
+        const nextAncestors = new Set(ancestors);
+        nextAncestors.add(name);
+
+        const activeClass = name === currentPage ? "active" : "";
+
+        html += '<li>';
+        html += '<a class="' + activeClass + '" href="#' +
+            encodeURIComponent(name) + '">' +
+            escapeHTML(name) + '</a>';
+
+        html += renderTree(name, nextAncestors, currentPage);
+        html += '</li>';
+    });
+
+    html += '</ul>';
+
+    return html;
+}
+
+function renderDocumentTree(currentPage) {
+    const roots = Object.keys(pages).filter(function(name) {
+        return pages[name].parent == null;
+    });
+
+    let html = '<ul class="tree-list root">';
+
+    roots.forEach(function(name) {
+        const ancestors = new Set([name]);
+        const activeClass = name === currentPage ? "active" : "";
+
+        html += '<li>';
+        html += '<a class="' + activeClass + '" href="#' +
+            encodeURIComponent(name) + '">' +
+            escapeHTML(name) + '</a>';
+
+        html += renderTree(name, ancestors, currentPage);
+        html += '</li>';
+    });
+
+    html += '</ul>';
+
+    document.getElementById("documentTree").innerHTML = html;
+}
+
+function renderBreadcrumbs(pageName) {
+    const path = [];
+    const visited = new Set();
+    let current = pageName;
+
+    while (current && pages[current] && !visited.has(current)) {
+        visited.add(current);
+        path.unshift(current);
+        current = pages[current].parent;
+    }
+
+    let html = "";
+
+    path.forEach(function(name, index) {
+        if (index > 0) {
+            html += "<span>›</span>";
+        }
+
+        if (index === path.length - 1) {
+            html += "<strong>" + escapeHTML(name) + "</strong>";
+        } else {
+            html += '<a href="#' +
+                encodeURIComponent(name) + '">' +
+                escapeHTML(name) + '</a>';
+        }
+    });
+
+    document.getElementById("breadcrumbs").innerHTML = html;
+}
+
+function renderChildDocuments(pageName) {
+    const children = getChildren(pageName);
+    const box = document.getElementById("childDocuments");
+
+    if (children.length === 0) {
+        box.innerHTML = "";
+        return;
+    }
+
+    let html = `
+        <div class="child-documents">
+            <h2>하위 문서</h2>
+            <ul>
+    `;
+
+    children.forEach(function(name) {
+        html += '<li><a href="#' +
+            encodeURIComponent(name) + '">' +
+            escapeHTML(name) + '</a></li>';
+    });
+
+    html += `
+            </ul>
+        </div>
+    `;
+
+    box.innerHTML = html;
+}
+
+function renderPage() {
+    let pageName = "홈";
+
+    if (location.hash.length > 1) {
+        try {
+            pageName = decodeURIComponent(location.hash.slice(1));
+        } catch (error) {
+            pageName = "홈";
+        }
+    }
+
+    let page = pages[pageName];
+
+    if (!page) {
+        pageName = "홈";
+        page = pages[pageName];
+    }
+
+    let redirectCount = 0;
+
+    while (page.redirect && redirectCount < 10) {
+        pageName = page.redirect;
+        page = pages[pageName];
+
+        if (!page) {
+            pageName = "홈";
+            page = pages[pageName];
+            break;
+        }
+
+        redirectCount++;
+    }
+
+    document.title = pageName + " - SK WIKI";
+
+    document.getElementById("pageInfo").textContent =
+        "SK WIKI · " + pageName;
+
+    document.getElementById("wikiContent").innerHTML =
+        renderMarkup(page.content || "");
+
+    renderBreadcrumbs(pageName);
+    renderDocumentTree(pageName);
+    renderChildDocuments(pageName);
+
+    document.getElementById("searchResults").innerHTML = "";
+}
+
+function searchPages() {
+    const input = document
+        .getElementById("searchInput")
+        .value.trim()
+        .toLowerCase();
+
+    const resultBox = document.getElementById("searchResults");
+    resultBox.innerHTML = "";
+
+    if (!input) {
+        return;
+    }
+
+    let found = 0;
+
+    for (const name in pages) {
+        const content = pages[name].content || "";
+        const searchable = (name + " " + content).toLowerCase();
+
+        if (searchable.includes(input)) {
+            const link = document.createElement("a");
+            link.href = "#" + encodeURIComponent(name);
+            link.textContent = name;
+            resultBox.appendChild(link);
+            found++;
+        }
+    }
+
+    if (found === 0) {
+        resultBox.textContent = "검색 결과가 없습니다.";
+    }
+}
+
+window.addEventListener("hashchange", renderPage);
+
+renderPage();
+</script>
+
+</body>
+</html>
